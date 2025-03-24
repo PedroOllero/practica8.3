@@ -1,13 +1,19 @@
 body{
   font-size: 10px;
   background-color: rgb(160, 219, 239);
-}
-
-#main{
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 60px;
+}
+
+
+#main{
+  width: 70%;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 50px;
 }
 
 #contenedor__carta{
