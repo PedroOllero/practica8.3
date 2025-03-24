@@ -6,13 +6,24 @@ const shuffleArray = (array: number[]) => {
     return array;
 }
 
-const cardhandler = () => {
-    const card = document.getElementById("carta")
-    if(card && card instanceof HTMLImageElement){
-        card.addEventListener("click", () => {
-            card.src= "/assets/img/1.png"
+const cardhandler1 = () => {
+    const card1 = document.getElementById("carta1")
+    if(card1 && card1 instanceof HTMLImageElement){
+        card1.addEventListener("click", () => {
+            card1.src= "/assets/img/1.png"
         })
     }
 }
 
-cardhandler();
+const cardhandler2 = () => {
+    const card2 = document.getElementById("carta2")
+    if(card2 && card2 instanceof HTMLImageElement){
+        card2.addEventListener("click", () => {
+            card2.src= "/assets/img/2.png"
+        })
+    }
+}
+
+
+cardhandler1();
+cardhandler2();
