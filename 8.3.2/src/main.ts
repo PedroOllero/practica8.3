@@ -6,5 +6,13 @@ const shuffleArray = (array: number[]) => {
     return array;
 }
 
-const numeros = [1, 2, 3, 4, 5, 6];
-console.log(shuffleArray(numeros));
+const cardhandler = () => {
+    const card = document.getElementById("carta")
+    if(card && card instanceof HTMLImageElement){
+        card.addEventListener("click", () => {
+            card.src= "/assets/img/1.png"
+        })
+    }
+}
+
+cardhandler();
