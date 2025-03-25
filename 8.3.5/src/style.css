@@ -26,3 +26,12 @@ body{
   border-radius: 10px;
   cursor: pointer;
 }
+
+.carta{
+  background-color: rgb(176, 119, 228);
+  width: 100%;
+  border-radius: 10px;
+  padding: 20px;
+  transition: 300ms all ease-in-out;
+  opacity: 0;
+}
