@@ -46,11 +46,11 @@ const voltear = () => {
                 carta.addEventListener("click", () => {
                     voltearEstilo(carta);
                     voltearLaCarta(tablero,indice);
-                    ;
                 });
             }
         });
     }
 }
+
 
 voltear();
