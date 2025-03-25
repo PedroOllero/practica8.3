@@ -27,22 +27,25 @@ export const sePuedeVoltearLaCarta = (
       tablero.cartas[indice].estaVuelta === false
     ) {
       return true;
-    }else{
+    } else {
       return false;
     }
-  }else{
+  } else {
     return false;
   }
 };
 
 export const voltearLaCarta = (tablero: Tablero, indice: number): void => {
-  tablero.indiceCartaVolteadaA === indice;
-  if (tablero.estadoPartida === "UnaCartaLevantada") {
-    tablero.estadoPartida = "DosCartasLevantadas";
-  } else {
-    tablero.estadoPartida = "UnaCartaLevantada";
+  if (sePuedeVoltearLaCarta(tablero, indice) === true) {
+    if (tablero.estadoPartida === "UnaCartaLevantada" && tablero.indiceCartaVolteadaA !== undefined) {
+      tablero.indiceCartaVolteadaB = indice;
+      tablero.estadoPartida = "DosCartasLevantadas";
+      sonPareja(tablero.indiceCartaVolteadaA, tablero.indiceCartaVolteadaB, tablero)
+    } else {
+      tablero.indiceCartaVolteadaA = indice;
+      tablero.estadoPartida = "UnaCartaLevantada";
+    }
   }
-  console.log(tablero.estadoPartida);
 };
 
 export const sonPareja = (
@@ -50,10 +53,14 @@ export const sonPareja = (
   indiceB: number,
   tablero: Tablero
 ): boolean => {
-  tablero.indiceCartaVolteadaA = tablero.cartas[indiceA].idFoto;
-  tablero.indiceCartaVolteadaB = tablero.cartas[indiceB].idFoto;
-  if (tablero.indiceCartaVolteadaA === tablero.indiceCartaVolteadaB) {
-    return true;
+  if (tablero.estadoPartida === "DosCartasLevantadas") {
+    tablero.indiceCartaVolteadaA = tablero.cartas[indiceA].idFoto;
+    tablero.indiceCartaVolteadaB = tablero.cartas[indiceB].idFoto;
+    if (tablero.indiceCartaVolteadaA === tablero.indiceCartaVolteadaB) {
+      return true;
+    } else {
+      return false;
+    }
   } else {
     return false;
   }
@@ -64,15 +71,15 @@ export const parejaEncontrada = (
   indiceB: number,
   tablero: Tablero
 ): void => {
-  tablero.cartas[indiceA].encontrada = true;
-  tablero.cartas[indiceB].encontrada = true;
-  const quedanPorEncontrar = tablero.cartas.some(
-    (carta) => carta.encontrada !== false
-  );
-  if (quedanPorEncontrar) {
-    tablero.estadoPartida = "PartidaCompleta";
-  } else {
-    tablero.estadoPartida = "CeroCartasLevantadas";
+  if (sonPareja(indiceA, indiceB, tablero) === true) {
+    const quedanPorEncontrar = tablero.cartas.some(
+      (carta) => carta.encontrada !== false
+    );
+    if (quedanPorEncontrar) {
+      tablero.estadoPartida = "PartidaCompleta";
+    } else {
+      tablero.estadoPartida = "CeroCartasLevantadas";
+    }
   }
 };
 

@@ -1,56 +1,54 @@
 import { Carta, tablero } from "./model";
-import { iniciarPartida, voltearLaCarta } from "./motor";
+import { iniciarPartida, parejaEncontrada, voltearLaCarta } from "./motor";
 
-document.addEventListener("DOMContentLoaded", () => {
-    iniciarButtonHandler();
-});
 
-const iniciarButtonHandler = () => {
-    const iniciarButton = document.getElementById("iniciarPartida");
-    if(iniciarButton && iniciarButton instanceof HTMLButtonElement){
-        iniciarButton.addEventListener("click", () => {
-            iniciarPartida(tablero)
-            imprimirCartas(tablero.cartas);
-        })
-        
-    }
-}
+export const iniciarButtonHandler = () => {
+  const iniciarButton = document.getElementById("iniciarPartida");
+  if (iniciarButton && iniciarButton instanceof HTMLButtonElement) {
+    iniciarButton.addEventListener("click", () => {
+      iniciarPartida(tablero);
+      imprimirCartas(tablero.cartas);
+    });
+  }
+};
 
 const imprimirCartas = (cartasBarajadas: Carta[]) => {
-    const cartas = document.querySelectorAll(".carta");
-    if(cartas){
-        cartas.forEach((carta) => {
-            if(carta && carta instanceof HTMLImageElement){
-                let indice: number = parseInt(carta.id)
-                if (!isNaN(indice) && tablero.cartas[indice]) {
-                    carta.src = tablero.cartas[indice].imagen.toString();
-                } else {
-                    console.error("Índice inválido o carta no encontrada:", indice);
-                }
-            }
+  const cartas = document.querySelectorAll(".carta");
+  if (cartas) {
+    cartas.forEach((carta) => {
+      if (carta && carta instanceof HTMLImageElement) {
+        let indice: number = parseInt(carta.id);
+        if (!isNaN(indice) && tablero.cartas[indice]) {
+          carta.src = tablero.cartas[indice].imagen.toString();
+        } else {
+          console.error("Índice inválido o carta no encontrada:", indice);
         }
-        )
-    }
-}
+      }
+    });
+  }
+};
 
-const voltearEstilo = (objeto: any) => {
-  objeto.setAttribute("style", "opacity: 1")
-}
-
-const voltear = () => {
+export const pulsar = () => {
     const cartas = document.querySelectorAll(".carta");
     if (cartas) {
         cartas.forEach((carta) => {
             if (carta && carta instanceof HTMLImageElement) {
-                let indice: number = parseInt(carta.id)
+                let indice: number = parseInt(carta.id);
                 carta.addEventListener("click", () => {
-                    voltearEstilo(carta);
-                    voltearLaCarta(tablero,indice);
+                    voltearLaCarta(tablero, indice);
+                    voltearEstiloOn(carta);
                 });
             }
         });
     }
-}
+};
+
+export const voltearEstiloOn = (objeto: any) => {
+  objeto.setAttribute("style", "opacity: 1");
+};
+
+export const voltearEstiloOff = (objeto: any) => {
+    objeto.setAttribute("style", "opacity: 1");
+  };
 
 
-voltear();
