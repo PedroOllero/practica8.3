@@ -46,7 +46,8 @@ const crearColeccionDeCartasInicial = (infoCartas: InfoCarta[]): Carta[] => {
     };
   });
   const duplicarCartasArray = [...nuevoArray, ...nuevoArray];
-  return duplicarCartasArray;
+  const cartasIndependientes = duplicarCartasArray.map((carta) => ({ ...carta }));
+  return cartasIndependientes;
 };
 
 export let cartas: Carta[] = crearColeccionDeCartasInicial(infoCartas);

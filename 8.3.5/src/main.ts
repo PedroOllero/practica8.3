@@ -1,6 +1,7 @@
-import { iniciarButtonHandler, pulsar } from "./ui";
+import { iniciarButtonHandler, crearTablero } from "./ui";
 
 document.addEventListener("DOMContentLoaded", () => {
+  crearTablero();
   iniciarButtonHandler();
-  pulsar();
+ 
 });

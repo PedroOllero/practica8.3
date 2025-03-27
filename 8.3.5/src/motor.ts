@@ -1,4 +1,5 @@
 import { Carta, cartas, Tablero } from "./model";
+import { aparecerTitulo, quitarImagen } from "./ui";
 
 const barajarCartas = (cartas: Carta[]): Carta[] => {
   for (let i = cartas.length - 1; i > 0; i--) {
@@ -19,78 +20,94 @@ export const sePuedeVoltearLaCarta = (
   indice: number
 ): boolean => {
   if (
-    tablero.estadoPartida === "CeroCartasLevantadas" ||
-    tablero.estadoPartida === "UnaCartaLevantada"
+    indice >= 0 &&
+    indice < tablero.cartas.length &&
+    (tablero.estadoPartida === "CeroCartasLevantadas" ||
+      tablero.estadoPartida === "UnaCartaLevantada") &&
+    tablero.cartas[indice].estaVuelta === false &&
+    tablero.cartas[indice].encontrada === false
   ) {
-    if (
-      tablero.cartas[indice].encontrada === false &&
-      tablero.cartas[indice].estaVuelta === false
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  } else {
-    return false;
+    return true;
   }
+  return false;
 };
 
 export const voltearLaCarta = (tablero: Tablero, indice: number): void => {
-  if (sePuedeVoltearLaCarta(tablero, indice) === true) {
-    if (tablero.estadoPartida === "UnaCartaLevantada" && tablero.indiceCartaVolteadaA !== undefined) {
-      tablero.indiceCartaVolteadaB = indice;
-      tablero.estadoPartida = "DosCartasLevantadas";
-      sonPareja(tablero.indiceCartaVolteadaA, tablero.indiceCartaVolteadaB, tablero)
-    } else {
-      tablero.indiceCartaVolteadaA = indice;
-      tablero.estadoPartida = "UnaCartaLevantada";
+  if((sePuedeVoltearLaCarta(tablero,indice)) === true){
+    if(tablero.estadoPartida === "CeroCartasLevantadas"){
+      tablero.cartas[indice].estaVuelta = true
+      tablero.indiceCartaVolteadaA = indice
+      tablero.estadoPartida = "UnaCartaLevantada"
+      return;
     }
+    if(tablero.estadoPartida === "UnaCartaLevantada"){
+      tablero.cartas[indice].estaVuelta = true
+      tablero.indiceCartaVolteadaB = indice
+      tablero.estadoPartida = "DosCartasLevantadas"
+      if(tablero.indiceCartaVolteadaA !== undefined && tablero.indiceCartaVolteadaB){
+        gameHandler(tablero.indiceCartaVolteadaA,tablero.indiceCartaVolteadaB, tablero)
+        
+      }
+    }
+  }else{
+    console.log("No se puede girar")
   }
+};
+
+const gameHandler = (indiceA: number, indiceB: number, tablero: Tablero) => {
+  if (sonPareja(indiceA, indiceB, tablero) === true) {
+    parejaEncontrada(indiceA, indiceB, tablero);
+  }
+  if (sonPareja(indiceA, indiceB, tablero) === false) {
+    parejaNoEncontrada(indiceA, indiceB, tablero);
+  }
+
+  console.log(
+    "gamehandler",
+    sonPareja(indiceA, indiceB, tablero),
+    tablero.cartas[indiceA].idFoto,
+    tablero.cartas[indiceB].idFoto
+  );
 };
 
 export const sonPareja = (
   indiceA: number,
   indiceB: number,
   tablero: Tablero
-): boolean => {
-  if (tablero.estadoPartida === "DosCartasLevantadas") {
-    tablero.indiceCartaVolteadaA = tablero.cartas[indiceA].idFoto;
-    tablero.indiceCartaVolteadaB = tablero.cartas[indiceB].idFoto;
-    if (tablero.indiceCartaVolteadaA === tablero.indiceCartaVolteadaB) {
-      return true;
-    } else {
-      return false;
-    }
-  } else {
-    return false;
-  }
-};
+): boolean => tablero.cartas[indiceA].idFoto === tablero.cartas[indiceB].idFoto;
 
 export const parejaEncontrada = (
   indiceA: number,
   indiceB: number,
   tablero: Tablero
 ): void => {
-  if (sonPareja(indiceA, indiceB, tablero) === true) {
-    const quedanPorEncontrar = tablero.cartas.some(
-      (carta) => carta.encontrada !== false
-    );
-    if (quedanPorEncontrar) {
-      tablero.estadoPartida = "PartidaCompleta";
-    } else {
-      tablero.estadoPartida = "CeroCartasLevantadas";
-    }
-  }
+  tablero.cartas[indiceA].encontrada = true;
+  tablero.cartas[indiceB].encontrada = true;
+  tablero.cartas[indiceA].estaVuelta = true;
+  tablero.cartas[indiceB].estaVuelta = true;
+  console.log("Pareja encontrada", indiceA, indiceB);
+  tablero.indiceCartaVolteadaA = undefined;
+  tablero.indiceCartaVolteadaB = undefined;
+  tablero.estadoPartida = "CeroCartasLevantadas";
+  finalPartida(tablero)
 };
 
 export const parejaNoEncontrada = (
-  tablero: Tablero,
   indiceA: number,
-  indiceB: number
+  indiceB: number,
+  tablero: Tablero
 ): void => {
-  tablero.cartas[indiceA].estaVuelta = false;
-  tablero.cartas[indiceB].estaVuelta = false;
-  tablero.estadoPartida = "CeroCartasLevantadas";
+  console.log("Pareja NO encontrada", indiceA, indiceB);
+  tablero.indiceCartaVolteadaA = undefined;
+  tablero.indiceCartaVolteadaB = undefined;
+  setTimeout(() => {
+    quitarImagen(indiceA);
+    quitarImagen(indiceB);
+    tablero.cartas[indiceA].estaVuelta = false;
+    tablero.cartas[indiceB].estaVuelta = false;
+    tablero.estadoPartida = "CeroCartasLevantadas";
+    console.log(tablero)
+  }, 3000);
 };
 
 export const esPartidaCompleta = (tablero: Tablero): boolean => {
@@ -99,3 +116,10 @@ export const esPartidaCompleta = (tablero: Tablero): boolean => {
   );
   return quedanPorEncontrar;
 };
+
+const finalPartida = (tablero: Tablero) => {
+  if(esPartidaCompleta(tablero) === true){
+    tablero.estadoPartida = "PartidaCompleta"
+    aparecerTitulo()
+  }
+}
