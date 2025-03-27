@@ -1,5 +1,5 @@
 import { Carta, cartas, Tablero } from "./model";
-import { aparecerTitulo, quitarImagen } from "./ui";
+import { aparecerTitulo, imprimirContadorIntentos, quitarImagen } from "./ui";
 
 const barajarCartas = (cartas: Carta[]): Carta[] => {
   for (let i = cartas.length - 1; i > 0; i--) {
@@ -81,6 +81,7 @@ export const parejaEncontrada = (
   indiceB: number,
   tablero: Tablero
 ): void => {
+  sumadorContadorIntento()
   tablero.cartas[indiceA].encontrada = true;
   tablero.cartas[indiceB].encontrada = true;
   tablero.cartas[indiceA].estaVuelta = true;
@@ -97,6 +98,7 @@ export const parejaNoEncontrada = (
   indiceB: number,
   tablero: Tablero
 ): void => {
+  sumadorContadorIntento()
   console.log("Pareja NO encontrada", indiceA, indiceB);
   tablero.indiceCartaVolteadaA = undefined;
   tablero.indiceCartaVolteadaB = undefined;
@@ -107,7 +109,7 @@ export const parejaNoEncontrada = (
     tablero.cartas[indiceB].estaVuelta = false;
     tablero.estadoPartida = "CeroCartasLevantadas";
     console.log(tablero)
-  }, 3000);
+  }, 2000);
 };
 
 export const esPartidaCompleta = (tablero: Tablero): boolean => {
@@ -121,5 +123,19 @@ const finalPartida = (tablero: Tablero) => {
   if(esPartidaCompleta(tablero) === true){
     tablero.estadoPartida = "PartidaCompleta"
     aparecerTitulo()
+  }
+}
+
+let contadorIntentos: number = 0
+
+const sumadorContadorIntento = () => {
+  contadorIntentos++
+  console.log("ContadorIntentos", contadorIntentos)
+  if(contadorIntentos > 0){
+    let texto: string = `Llevas ${contadorIntentos} intentos`
+    imprimirContadorIntentos(texto)
+  }else{
+    let texto: string = `Todavía no lo has intentado`
+    imprimirContadorIntentos(texto)
   }
 }

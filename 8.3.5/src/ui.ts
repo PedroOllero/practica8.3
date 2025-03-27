@@ -1,17 +1,14 @@
 import { Carta, tablero } from "./model";
 import { iniciarPartida, parejaEncontrada, sePuedeVoltearLaCarta, voltearLaCarta } from "./motor";
 
-
 export const iniciarButtonHandler = () => {
   const iniciarButton = document.getElementById("iniciarPartida");
   if (iniciarButton && iniciarButton instanceof HTMLButtonElement) {
     iniciarButton.addEventListener("click", () => {
       iniciarPartida(tablero);
-      //imprimirCartas(tablero.cartas);
     });
   }
 };
-
 
 const mostrarImagen = (indice: number) => {
   const imageContainer = document.querySelector(`img[data-id-imagen="${indice}"]`);
@@ -31,21 +28,31 @@ export const quitarImagen = (indice: number) => {
   }
 }
 
-
 export const pulsar = (indice: number, div: HTMLDivElement) => {
    if(tablero.estadoPartida === "PartidaNoIniciada") {
     alert("La partida no ha sido iniciada");
     return;
    }
 
+   if(tablero.cartas[indice].estaVuelta === true){
+    alert("Carta ya volteada")
+   }
+
    if (tablero.estadoPartida === "CeroCartasLevantadas" || tablero.estadoPartida === "UnaCartaLevantada") {
       voltearLaCarta(tablero,indice);
       mostrarImagen(indice);
-      //div.classList.add('carta-volteada');
       console.log(tablero)
    }
 
 };
+
+const efectoGiro = (div: HTMLDivElement) => {
+  div.classList.add('carta-volteada');
+}
+
+export const efectoGiroQuitar = (div: HTMLDivElement) => {
+  div.classList.remove('carta-volteada');
+}
 
 export const crearTablero = () => {
   const tableroContainer = document.getElementById("main");
@@ -65,10 +72,16 @@ export const crearTablero = () => {
   }
 }
 
-
 export const aparecerTitulo = () => {
   let titulo = document.getElementById("titulo");
   if(titulo && titulo instanceof HTMLHeadingElement){
     titulo.setAttribute("style","opacity: 1")
+  }
+}
+
+export const imprimirContadorIntentos = (texto: string) =>{
+  let cajaIntentos = document.getElementById("intentos")
+  if(cajaIntentos && cajaIntentos instanceof HTMLHeadingElement){
+    cajaIntentos.textContent = texto
   }
 }

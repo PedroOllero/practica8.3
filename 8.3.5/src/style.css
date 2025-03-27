@@ -10,10 +10,11 @@ body{
 
 
 #main{
-  width: 70%;
+  width: 60%;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 40px;
+  gap: 30px;
+  padding: 10px;
 }
 
 .contenedor__carta{
@@ -21,11 +22,15 @@ body{
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 170px;
-  height: 170px;
+  width: 160px;
+  height: 160px;
   border-radius: 10px;
   cursor: pointer;
-  transition: all 300ms ease;
+  transition: all 300ms ease-in-out;
+}
+
+.contenedor__carta:hover{
+  background-color: rgb(32, 90, 140);
 }
 
 .carta{
@@ -36,6 +41,7 @@ body{
   transition: 300ms all ease-in-out;
   opacity: 1;
 }
+
 
 .carta-volteada {
   background-color: rgb(176, 119, 228);
@@ -65,4 +71,13 @@ body{
   border: 2px solid rgb(176, 119, 228);
   padding: 10px;
   cursor: pointer;
+}
+
+#intentos{
+  margin-bottom: 5px;
+  color: white;
+  background-color: rgb(176, 119, 228);
+  padding: 10px;
+  border-radius: 10px;
+  text-align: center;
 }
